@@ -18,3 +18,5 @@ tsconfig.tsbuildinfo
 .eslintcache
 *storybook.log
 *.local
+
+*.exe

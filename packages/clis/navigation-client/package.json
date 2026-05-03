@@ -1,0 +1,20 @@
+{
+  "private": true,
+  "name": "@truckermudgeon/navigation-client",
+  "version": "0.0.0",
+  "license": "GPL-3.0-or-later",
+  "type": "module",
+  "bin": "./index.ts",
+  "scripts": {
+    "build": "bun build --compile --define \"process.env.NODE_ENV='production'\" index.ts"
+  },
+  "dependencies": {
+    "@trpc/client": "^11.8.1",
+    "@truckermudgeon/navigation": "0.0.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "typescript": "^5.9.2"
+  }
+}
