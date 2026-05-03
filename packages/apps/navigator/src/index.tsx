@@ -28,12 +28,15 @@ mobx.configure({
 const materialTheme = materialExtendTheme();
 const container = document.getElementById('root')!;
 const root = createRoot(container);
+const wsUrl =
+  import.meta.env.VITE_WS_URL ??
+  `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.hostname}:62840/navigator`;
 
 const appClient = createTRPCProxyClient<AppRouter>({
   links: [
     wsLink({
       client: createWSClient({
-        url: import.meta.env.VITE_WS_URL,
+        url: wsUrl,
         connectionParams: () => {
           const viewerId = localStorage.getItem('viewerId');
           return viewerId ? { viewerId } : null;
