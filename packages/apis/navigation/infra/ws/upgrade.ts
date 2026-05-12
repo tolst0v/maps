@@ -2,7 +2,6 @@ import { UnreachableError } from '@truckermudgeon/base/precon';
 import type { IncomingMessage } from 'http';
 import type { Duplex } from 'stream';
 import type { WebSocketServer } from 'ws';
-import { env } from '../../env';
 import { getClientIp } from '../http/get-client-ip';
 import { UpgradeRejectionReason } from '../metrics/ws';
 import type { Services } from '../services';
@@ -43,7 +42,7 @@ export async function handleUpgrade(
     case '/navigator':
     case '/navigator?connectionParams=1':
       maybeClientHeadersOk =
-        req.headers.origin === env.ALLOWED_ORIGIN &&
+        originMatchesHost(req.headers.origin, req.headers.host) &&
         req.headers['user-agent'] != null &&
         req.headers['user-agent'] !== 'node';
       break;
@@ -97,6 +96,20 @@ export async function handleUpgrade(
       websocketKey: req.headers['sec-websocket-key'],
     });
   });
+}
+
+function originMatchesHost(origin: string | undefined, host: string | undefined) {
+  if (origin == null || host == null) return false;
+
+  try {
+    const url = new URL(origin);
+    return (
+      (url.protocol === 'http:' || url.protocol === 'https:') &&
+      url.host === host
+    );
+  } catch {
+    return false;
+  }
 }
 
 function rejectUpgrade(socket: Duplex, status: number, message: string) {

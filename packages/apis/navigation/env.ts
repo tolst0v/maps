@@ -10,7 +10,6 @@ const EnvSchema = z.object({
     .enum(['true', 'false'])
     .default('false')
     .transform(val => val === 'true'),
-  ALLOWED_ORIGIN: z.coerce.string().url().default('http://localhost:5173'),
 
   RATE_LIMIT_ENABLED: z
     .enum(['true', 'false'])
