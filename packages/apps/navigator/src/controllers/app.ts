@@ -30,6 +30,8 @@ export class AppStoreImpl implements AppStore {
   themeMode: 'light' | 'dark' = 'light';
   cameraMode: CameraMode = CameraMode.FOLLOW;
   bearingMode: BearingMode = BearingMode.MATCH_MAP;
+  followZoomBase = 13;
+  followZoomOffset = 0;
   activeRoute: Route | undefined = undefined;
   activeRouteIndex: RouteIndex | undefined = undefined;
   truckPoint: [lon: number, lat: number] = [0, 0];
@@ -458,6 +460,10 @@ export class AppControllerImpl implements AppController {
     store.cameraMode = CameraMode.FOLLOW;
   }
 
+  setFollowZoom(store: AppStore, zoom: number) {
+    store.followZoomOffset = clamp(zoom - store.followZoomBase, -3, 2);
+  }
+
   setNorthUnlock(store: AppStore) {
     store.bearingMode = BearingMode.MATCH_MAP;
   }
@@ -602,9 +608,11 @@ export class AppControllerImpl implements AppController {
 
       switch (store.cameraMode) {
         case CameraMode.FOLLOW:
+          store.followZoomBase = toFollowZoomForSpeed(speedMph);
           map.easeTo({
             ...toCameraOptions(center, bearing, speedMph, {
               isNorthLock: store.bearingMode === BearingMode.NORTH_LOCK,
+              zoomOffset: store.followZoomOffset,
             }),
             duration,
             padding: this.padding,
@@ -962,18 +970,15 @@ function toCameraOptions(
   center: Position,
   bearing: number,
   speedMph: number,
-  options: { isNorthLock: boolean },
+  options: { isNorthLock: boolean; zoomOffset: number },
 ) {
-  let zoom;
   let pitch;
+  const zoom = toFollowZoomForSpeed(speedMph) + options.zoomOffset;
   if (speedMph > 60) {
-    zoom = 11;
     pitch = 30;
   } else if (speedMph > 30) {
-    zoom = 12;
     pitch = 45;
   } else {
-    zoom = 13;
     pitch = 50;
   }
   return {
@@ -982,6 +987,16 @@ function toCameraOptions(
     pitch: options.isNorthLock ? 0 : pitch,
     bearing: options.isNorthLock ? 0 : bearing,
   };
+}
+
+function toFollowZoomForSpeed(speedMph: number): number {
+  if (speedMph > 60) {
+    return 11;
+  } else if (speedMph > 30) {
+    return 12;
+  } else {
+    return 13;
+  }
 }
 
 function getNextStep(step: RouteStep, route: Route): RouteStep | undefined {

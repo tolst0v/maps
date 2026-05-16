@@ -20,6 +20,7 @@ export const Default: Story = {
     center: [-114.806, 36.282],
     onLoad: () => console.log('map loaded'),
     onDragStart: fn(),
+    onZoomEnd: fn(),
     Destinations: () => <div />,
     TrailerOrWaypointMarkers: () => <div />,
     PlayerMarker: React.forwardRef((_, ref) =>

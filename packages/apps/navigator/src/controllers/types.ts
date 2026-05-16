@@ -23,6 +23,8 @@ export interface AppStore {
   themeMode: 'light' | 'dark';
   cameraMode: CameraMode;
   bearingMode: BearingMode;
+  followZoomBase: number;
+  followZoomOffset: number;
   truckPoint: readonly [lon: number, lat: number];
   trailerPoint: readonly [lon: number, lat: number] | undefined;
   showNavSheet: boolean;

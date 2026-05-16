@@ -342,6 +342,7 @@ export function createApp({
       mode={store.themeMode}
       onLoad={onMapLoad}
       onDragStart={action(() => controller.setFree(store))}
+      onZoomEnd={action(zoom => controller.setFollowZoom(store, zoom))}
       Destinations={_Destinations}
       TrailerOrWaypointMarkers={_TrailerOrWaypointMarkers}
       PlayerMarker={PlayerMarker}

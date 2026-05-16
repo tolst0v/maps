@@ -35,6 +35,7 @@ export const SlippyMap = (props: {
   mode?: 'light' | 'dark';
   onLoad(map: MapRef, playerMarker: MapLibreGLMarker): void;
   onDragStart(): void;
+  onZoomEnd(zoom: number): void;
   Destinations: () => ReactElement;
   TrailerOrWaypointMarkers: () => ReactElement;
   PlayerMarker: ForwardRefExoticComponent<PlayerMarkerProps>;
@@ -49,6 +50,7 @@ export const SlippyMap = (props: {
   } = props;
   const mapRef = useRef<MapRef>(null);
   const playerMarkerRef = useRef<MapLibreGLMarker>(null);
+  const userZoomingRef = useRef(false);
 
   return (
     <MapGl
@@ -65,10 +67,14 @@ export const SlippyMap = (props: {
       }}
       onDragStart={() => props.onDragStart()}
       onZoomStart={e => {
-        // we only care about zoom start events triggered by user input, not
-        // triggered programmatically by, e.g., camera-moving APIs
         if (e.originalEvent) {
-          props.onDragStart();
+          userZoomingRef.current = true;
+        }
+      }}
+      onZoomEnd={() => {
+        if (userZoomingRef.current) {
+          userZoomingRef.current = false;
+          props.onZoomEnd(assertExists(mapRef.current).getZoom());
         }
       }}
       style={{
