@@ -4,7 +4,15 @@ import { forwardRef } from 'react';
 // TODO make units more explicit via prop.
 
 export const SpeedLimit = forwardRef(
-  (props: { limitMph?: number; speedMph: number; limitKph?: number }, ref) => {
+  (
+    props: {
+      limitMph?: number;
+      speedMph: number;
+      limitKph?: number;
+      gameTimeMinutes?: number;
+    },
+    ref,
+  ) => {
     const limitSign =
       props.limitMph != null ? (
         <SpeedLimitMph limitMph={props.limitMph} ref={ref} />
@@ -16,6 +24,11 @@ export const SpeedLimit = forwardRef(
       (props.limitMph ?? 0) < 5 ? Infinity : (props.limitMph ?? 0);
     const ratio = props.speedMph / effectiveLimit;
     const color = ratio <= 1 ? 'white' : ratio <= 1.1 ? 'orange' : 'red';
+
+    const gameTime =
+      props.gameTimeMinutes == null
+        ? undefined
+        : toClockString(props.gameTimeMinutes);
 
     return (
       <Stack
@@ -51,10 +64,36 @@ export const SpeedLimit = forwardRef(
             mph
           </Typography>
         </Stack>
+        {gameTime ? (
+          <Typography
+            gridColumn={limitSign ? '2' : '1 / -1'}
+            textAlign={'center'}
+            level={'body-sm'}
+            fontWeight={'bold'}
+            lineHeight={1.2}
+            sx={{
+              color: 'white',
+              fontVariantNumeric: 'tabular-nums',
+            }}
+          >
+            {gameTime}
+          </Typography>
+        ) : null}
       </Stack>
     );
   },
 );
+
+function toClockString(totalMinutes: number): string {
+  const minutesInDay = 24 * 60;
+  const normalizedMinutes =
+    ((Math.floor(totalMinutes) % minutesInDay) + minutesInDay) % minutesInDay;
+  const hours24 = Math.floor(normalizedMinutes / 60);
+  const hours12 = hours24 % 12 || 12;
+  const minutes = normalizedMinutes % 60;
+  const period = hours24 < 12 ? 'AM' : 'PM';
+  return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
+}
 
 const SpeedLimitMph = forwardRef((props: { limitMph: number }, ref) => (
   <Box

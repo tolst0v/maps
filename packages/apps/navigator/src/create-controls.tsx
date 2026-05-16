@@ -39,7 +39,11 @@ export function createControls(opts: { appStore: AppStore }): {
     />
   ));
   const _SpeedLimit = observer(() => (
-    <SpeedLimit limitMph={store.limitMph} speedMph={store.speedMph} />
+    <SpeedLimit
+      limitMph={store.limitMph}
+      speedMph={store.speedMph}
+      gameTimeMinutes={store.gameTimeMinutes}
+    />
   ));
   const RecenterFab = observer((props: { onClick: () => void }) => (
     <Fab

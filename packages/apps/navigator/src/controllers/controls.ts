@@ -12,6 +12,7 @@ export class ControlsStoreImpl implements ControlsStore {
   bearing = 0;
   limitMph = 0;
   speedMph = 0;
+  gameTimeMinutes: number | undefined;
 
   constructor(private readonly appStore: AppStore) {
     makeAutoObservable(this);
@@ -38,6 +39,7 @@ export class ControlsControllerImpl implements ControlsController {
         const speedMph = Math.abs(Math.round(speed * 2.236936));
         store.limitMph = gameState.speedLimit;
         store.speedMph = speedMph;
+        store.gameTimeMinutes = gameState.gameTimeMinutes;
       }),
     });
     map.on(

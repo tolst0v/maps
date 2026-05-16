@@ -71,6 +71,7 @@ export interface ControlsStore {
   bearing: number;
   limitMph: number;
   speedMph: number;
+  gameTimeMinutes: number | undefined;
   showRecenterFab: boolean;
   showRouteFab: boolean;
   showSearchFab: boolean;

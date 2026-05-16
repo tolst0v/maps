@@ -220,6 +220,8 @@ export interface GameState extends TelemetrySample {
   // world stuff
   speedLimit: number;
   scale: number;
+  /** In-game time, in minutes since day 0. */
+  gameTimeMinutes: number;
 }
 
 export interface SegmentInfo {
