@@ -10,7 +10,7 @@ export const SpeedLimit = forwardRef(
       speedMph: number;
       limitKph?: number;
       gameTimeMinutes?: number;
-      nextRestStopMs?: number;
+      nextRestStopMinutes?: number;
     },
     ref,
   ) => {
@@ -31,9 +31,9 @@ export const SpeedLimit = forwardRef(
         ? undefined
         : toClockString(props.gameTimeMinutes);
     const nextRestStop =
-      props.nextRestStopMs == null
+      props.nextRestStopMinutes == null
         ? undefined
-        : toDurationString(props.nextRestStopMs);
+        : toDurationString(props.nextRestStopMinutes);
 
     return (
       <Stack
@@ -119,8 +119,8 @@ function toClockString(totalMinutes: number): string {
   return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
 }
 
-function toDurationString(ms: number): string {
-  const totalMinutes = Math.max(0, Math.ceil(ms / 60_000));
+function toDurationString(minutesLeft: number): string {
+  const totalMinutes = Math.max(0, Math.ceil(minutesLeft));
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
 

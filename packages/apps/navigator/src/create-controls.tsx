@@ -43,7 +43,7 @@ export function createControls(opts: { appStore: AppStore }): {
       limitMph={store.limitMph}
       speedMph={store.speedMph}
       gameTimeMinutes={store.gameTimeMinutes}
-      nextRestStopMs={store.nextRestStopMs}
+      nextRestStopMinutes={store.nextRestStopMinutes}
     />
   ));
   const RecenterFab = observer((props: { onClick: () => void }) => (

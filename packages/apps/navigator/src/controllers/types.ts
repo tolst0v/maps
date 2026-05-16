@@ -74,7 +74,7 @@ export interface ControlsStore {
   limitMph: number;
   speedMph: number;
   gameTimeMinutes: number | undefined;
-  nextRestStopMs: number | undefined;
+  nextRestStopMinutes: number | undefined;
   showRecenterFab: boolean;
   showRouteFab: boolean;
   showSearchFab: boolean;
