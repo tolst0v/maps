@@ -31,6 +31,7 @@ export const JobLocationSchema = z.object({
 export const TruckSimTelemetrySchema = z.object({
   navigation: z.object({
     speedLimit: SpeedSchema,
+    nextRestStop: z.number(),
   }),
   truck: z.object({
     speed: SpeedSchema,

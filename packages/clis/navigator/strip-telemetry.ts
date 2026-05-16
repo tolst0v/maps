@@ -5,6 +5,7 @@ export function strip(t: TelemetryData): TruckSimTelemetry {
   return {
     navigation: {
       speedLimit: t.navigation.speedLimit,
+      nextRestStop: t.navigation.nextRestStop,
     },
     truck: {
       speed: t.truck.speed,

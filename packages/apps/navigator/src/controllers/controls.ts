@@ -13,6 +13,7 @@ export class ControlsStoreImpl implements ControlsStore {
   limitMph = 0;
   speedMph = 0;
   gameTimeMinutes: number | undefined;
+  nextRestStopMs: number | undefined;
 
   constructor(private readonly appStore: AppStore) {
     makeAutoObservable(this);
@@ -40,6 +41,7 @@ export class ControlsControllerImpl implements ControlsController {
         store.limitMph = gameState.speedLimit;
         store.speedMph = speedMph;
         store.gameTimeMinutes = gameState.gameTimeMinutes;
+        store.nextRestStopMs = gameState.nextRestStopMs;
       }),
     });
     map.on(

@@ -35,6 +35,7 @@ export function toGameState(telemetry: TruckSimTelemetry): GameState {
     speedLimit: telemetry.navigation.speedLimit.mph,
     scale: telemetry.game.scale,
     gameTimeMinutes: telemetry.game.time.value,
+    nextRestStopMs: telemetry.navigation.nextRestStop,
   };
 }
 

@@ -222,6 +222,8 @@ export interface GameState extends TelemetrySample {
   scale: number;
   /** In-game time, in minutes since day 0. */
   gameTimeMinutes: number;
+  /** Remaining time until the next required rest stop, in milliseconds. */
+  nextRestStopMs: number;
 }
 
 export interface SegmentInfo {

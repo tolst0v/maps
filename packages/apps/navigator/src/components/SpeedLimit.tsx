@@ -10,6 +10,7 @@ export const SpeedLimit = forwardRef(
       speedMph: number;
       limitKph?: number;
       gameTimeMinutes?: number;
+      nextRestStopMs?: number;
     },
     ref,
   ) => {
@@ -29,6 +30,10 @@ export const SpeedLimit = forwardRef(
       props.gameTimeMinutes == null
         ? undefined
         : toClockString(props.gameTimeMinutes);
+    const nextRestStop =
+      props.nextRestStopMs == null
+        ? undefined
+        : toDurationString(props.nextRestStopMs);
 
     return (
       <Stack
@@ -65,19 +70,38 @@ export const SpeedLimit = forwardRef(
           </Typography>
         </Stack>
         {gameTime ? (
-          <Typography
+          <Stack
             gridColumn={limitSign ? '2' : '1 / -1'}
-            textAlign={'center'}
-            level={'body-sm'}
-            fontWeight={'bold'}
-            lineHeight={1.2}
-            sx={{
-              color: 'white',
-              fontVariantNumeric: 'tabular-nums',
-            }}
+            alignItems={'center'}
+            gap={0.25}
           >
-            {gameTime}
-          </Typography>
+            <Typography
+              textAlign={'center'}
+              level={'body-sm'}
+              fontWeight={'bold'}
+              lineHeight={1.2}
+              sx={{
+                color: 'white',
+                fontVariantNumeric: 'tabular-nums',
+              }}
+            >
+              {gameTime}
+            </Typography>
+            {nextRestStop ? (
+              <Typography
+                textAlign={'center'}
+                level={'body-xs'}
+                lineHeight={1}
+                sx={{
+                  color: 'white',
+                  opacity: 0.85,
+                  fontVariantNumeric: 'tabular-nums',
+                }}
+              >
+                Sleep in {nextRestStop}
+              </Typography>
+            ) : null}
+          </Stack>
         ) : null}
       </Stack>
     );
@@ -93,6 +117,17 @@ function toClockString(totalMinutes: number): string {
   const minutes = normalizedMinutes % 60;
   const period = hours24 < 12 ? 'AM' : 'PM';
   return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
+}
+
+function toDurationString(ms: number): string {
+  const totalMinutes = Math.max(0, Math.ceil(ms / 60_000));
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  if (hours === 0) {
+    return `${minutes}m`;
+  }
+  return `${hours}h ${minutes.toString().padStart(2, '0')}m`;
 }
 
 const SpeedLimitMph = forwardRef((props: { limitMph: number }, ref) => (
